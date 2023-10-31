@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 class Kernel extends HttpKernel
 {
@@ -40,6 +41,7 @@ class Kernel extends HttpKernel
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            EnsureFrontendRequestsAreStateful::class,
             \App\Http\Middleware\EncryptCookies::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -50,6 +52,9 @@ class Kernel extends HttpKernel
         ],
         'studentpages'=>[
             \App\Http\Middleware\StudentLogin::class,
+        ],
+        'adminApi'=>[
+            \App\Http\Middleware\AdminApi::class,
         ],
         // 'api-session'=>[
         //     \App\Http\Middleware\StudentLogin::class,

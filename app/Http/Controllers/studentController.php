@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Models\UserOtp;
 use App\Models\Payment;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 
@@ -37,6 +38,12 @@ class studentController extends Controller
             'rollNo'=>'required',
             'regNo'=>'required'
         ]);
+        $data = New User();
+        $data->name = $req->name;
+        $data->email = $req->email;
+        $data->role = 2;
+        $data->password = Hash::make($req->password);
+        $data->save();
         $user = New Student();
         $user->status = 2;
         $user->name = $req->name;
@@ -182,6 +189,10 @@ public function studentDetail(){
     $data = Student::where('id',session('loggedStudent'))->first();
     return view('Student.studentDetail',['stdn'=>$data]);
 }
+public function studentDetailApi(){
+    $data = Student::where('email',auth()->user()->email)->first();
+    return response()->json($data);
+}
 public function logoutStudent(){
     if(session()->has('loggedStudent')){
         $data = Student::where('id',session('loggedStudent'))->first();
@@ -197,10 +208,16 @@ public function studentReg(Request $req){
         'motherName'=>'required',
         'birthDate'=>'required',
         'phoneNo'=>'required',
-        'email'=>'required',
+        'email'=>'required|email',
         'password'=>'required',
         'image'=>'required',
     ]);
+    $data = New User();
+    $data->name = $req->name;
+    $data->email = $req->email;
+    $data->role = 2;
+    $data->password = Hash::make($req->password);
+    $data->save();
     $user = New Student();
     $user->status = 1;
     $user->name = $req->name;

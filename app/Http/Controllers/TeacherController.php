@@ -21,7 +21,10 @@ class TeacherController extends Controller
     public function TeacherListApi()
     {
         $data = Teacher::get();
-        return response()->json($data);
+        // return response()->json($data);
+        return response([
+            'message'=>"api runs successfully"
+        ]);
     }
     //
     
