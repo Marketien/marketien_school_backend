@@ -9,15 +9,28 @@ use App\Models\User;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 class studentController extends Controller
 {
     public function studentList(){
-        $std = Student::where('status',2)->paginate(2);
+        $std = Student::where('status',2)->get();
         return view('Admin.Student.studentList',['students'=>$std]);
+    }
+    public function studentListApi(){
+        $std = Student::where('status',2)->get();
+        return response([
+            'student'=> $std
+        ]) ;
     }
     public function studentApproval(){
         $std = Student::where('status',1)->get();
         return view('Admin.Student.studentApproval',['students'=>$std]);
+    }
+    public function studentApprovalApi(){
+        $std = Student::where('status',1)->get();
+        return response([
+            'student'=> $std
+        ]) ;
     }
     public function studentForm(){
         return view('Admin.Student.addStudent');
@@ -81,10 +94,22 @@ class studentController extends Controller
 //        Student::where('id',$request->id)->delete();
 //        return redirect('product-list')->with('message','Successful! Product Deleted Successfully');
 //    }
-public function studentDelete($id){
+public function studentDeleteApi($id){
+    
         $data = Student::find($id);
-        $data->delete();
-        return redirect('student-list')->with('message','Student deleted Successfully');
+        if(!$data){
+            return response([
+                "message"=>'student doesnt exist',
+                "status"=> 202
+            ]);
+        }else{
+            $data->delete();
+            return response([
+                "message"=>'student deleted successfuly',
+                "status"=> 201
+            ]);
+        }
+       
 }
 public function updateForm($id){
         $data = Student::find($id);
@@ -191,7 +216,14 @@ public function studentDetail(){
 }
 public function studentDetailApi(){
     $data = Student::where('email',auth()->user()->email)->first();
-    return response()->json($data);
+    $fileName = $data->image;
+    $path = asset('/image/upload/'. $fileName );
+    // $path = public_path().'/image/upload/'.$fileName;
+    // $file = Response::download($path);
+    return response()->json([
+        'user'=> $data,
+        'file'=> $path
+    ]);
 }
 public function logoutStudent(){
     if(session()->has('loggedStudent')){
@@ -201,6 +233,56 @@ public function logoutStudent(){
       return redirect('/');
     }
   }
+  //Api
+public function studentRegApi(Request $req){
+    // $req->validate([
+    //    'name'=>'required',
+    //     'fatherName'=>'required',
+    //     'motherName'=>'required',
+    //     'birthDate'=>'required',
+    //     'phoneNo'=>'required',
+    //     'email'=>'required|email|unique:users',
+    //     'password'=>'required',
+    //     // 'image'=>'required',
+    // ]);
+    // $data = New User();
+    // $data->name = $req->name;
+    // $data->email = $req->email;
+    // $data->role = 2;
+    // $data->password = Hash::make($req->password);
+    // $data->save();
+    $date = strtotime($req->birthDate);
+    $formatDate = date('Y-m-d', $date);
+    $user = New Student();
+    $user->status = 1;
+    $user->name = $req->name;
+    $user->fatherName = $req->fatherName;
+    $user->motherName = $req->motherName;
+    $user->birthDate =  $formatDate;
+    $user->phoneNo = $req->phoneNo;
+    $user->email = $req->email;
+    $user->password = Hash::make($req->password);
+    $file = $req->file('image');
+    $extension = $file->getClientOriginalExtension();
+    $fileName =time().'.'.$extension;
+    $file->move('image/upload',$fileName);
+    $user->image = $fileName;
+    $result = $user->save();
+    if($result){
+        return response([
+          'message'=>'Successfull, Wait for the approval',
+          'status'=>'201'
+        ]);
+    }
+    else{
+        return response([
+            'message'=>'failed, Something Went Wrong',
+            'status'=>'202'
+          ]);
+    }
+
+}
+//api//
 public function studentReg(Request $req){
     $req->validate([
        'name'=>'required',
@@ -208,7 +290,7 @@ public function studentReg(Request $req){
         'motherName'=>'required',
         'birthDate'=>'required',
         'phoneNo'=>'required',
-        'email'=>'required|email',
+        'email'=>'required|email|unique',
         'password'=>'required',
         'image'=>'required',
     ]);
@@ -245,6 +327,12 @@ public function studentApproved($id){
     $data = Student::find($id);
     $data->status = 2;
     $data->save();
+    User::create([
+       'name'=> $data->name,
+       'email'=> $data->email,
+       'password'=>$data->password,
+       'role'=> '2'
+    ]);
     return redirect()->back()->with('message','Student Approved');
 
 }

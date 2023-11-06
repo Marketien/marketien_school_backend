@@ -72,7 +72,7 @@
                             @endforeach
                             </tbody>
                         </table>
-                        <div class="d-flex">{{$students->onEachSide(5)->links()}}</div>
+                        {{-- <div class="d-flex">{{$students->onEachSide(5)->links()}}</div> --}}
                         
                     </div>
                 </div>

@@ -36,28 +36,16 @@ class UserController extends Controller
             return response([
                 'message' => ['These credentials do not match our records.'],
                 'status'=>'404'
-            ], 404);
+            ]);
         }
 }
-// function check(Request $request)
-//     {
-//         $user= User::where('email', $request->email)->first();
-//         // print_r($data);
-//             if (!$user || !Hash::check($request->password, $user->password)) {
-//                 return response([
-//                     'message' => ['These credentials do not match our records.']
-//                 ], 404);
-//             }
-        
-//              $token = $user->createToken('my-app-token')->plainTextToken;
-        
-//             $response = [
-//                 'user' => $user,
-//                 'token' => $token
-//             ];
-        
-//              return response($response, 201);
-//     }
+public function studentLogoutApi(Request $request){
+    $request->user()->currentAccessToken()->delete();
+    return response([
+        'message' => ['logged out successfully'],
+        'status'=>'405'
+    ]);
+}
 }
 
 

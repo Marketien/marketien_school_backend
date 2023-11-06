@@ -24,13 +24,15 @@ use App\Http\Controllers\UserController;
 // });
 Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::group(['middleware' => 'adminApi'], function(){
-        Route::get('/teacher-listApi',[TeacherController::class,'TeacherListApi'])->name('teacher-list-api');
+        
+        Route::get('/student-list',[studentController::class,'studentListApi'])->name('student-list-api');
+        Route::get('/pending-student-list',[studentController::class,'studentApprovalApi'])->name('pending-student-list-api');
+        Route::delete('/student-delete/{id}',[studentController::class,'studentDeleteApi'])->name('student-delete-api');
     });
     Route::get('/student-detail',[studentController::class,'studentDetailApi'])->name('student-detail-api');
+    Route::post('/student-logout',[UserController::class,'studentLogoutApi'])->name('student-logout-api');
     });
-// Route::group(['name'=>'payment', 'middleware'=>'studentpages'], function(){
-//     Route::get('/get-student-name',[PaymentController::class,'getStudent']);
-// });
+
 Route::get('/get-student-name',[PaymentController::class,'getStudent'])->name('get-student-name');
 Route::post('/store-payment',[PaymentController::class,'storePayment']);
 
@@ -38,3 +40,7 @@ Route::post('/store-payment',[PaymentController::class,'storePayment']);
 
 
 Route::post("/login",[UserController::class,'check']);
+Route::post('/student-reg',[studentController::class,'studentRegApi'])->name('student-reg-api');
+Route::get('/teacher-listApi',[TeacherController::class,'TeacherListApi'])->name('teacher-list-api');
+Route::delete('/student-delete/{id}',[studentController::class,'studentDeleteApi'])->name('student-delete-api');
+

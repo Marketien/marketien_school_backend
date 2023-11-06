@@ -32,7 +32,7 @@ Route::group(['name'=>'admin', 'middleware'=>'adminpages'], function(){
     Route::post('/addStudent',[studentController::class,'addStudent']);
 //    Route::post('/student-delete',[studentController::class,'studentDelete'])->name('deleteStudent');
 //    Route::get('/student-info/{id}',[studentController::class,'getStudentInformation'])->name('studentInfo');
-    Route::get('/student-delete/{id}',[studentController::class,'studentDelete']);
+    // Route::get('/student-delete/{id}',[studentController::class,'studentDelete']);
     Route::get('/student-edit/{id}',[studentController::class,'updateForm']);
     Route::post('/update-student',[studentController::class,'studentUpdate']);
     Route::get('/logout-admin',[AdminController::class,'logoutAdmin']);
