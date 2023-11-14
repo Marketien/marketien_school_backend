@@ -57,6 +57,9 @@ class Kernel extends HttpKernel
         'adminApi'=>[
             \App\Http\Middleware\AdminApi::class,
         ],
+        'studentApi'=>[
+            \App\Http\Middleware\StudentApi::class,
+        ],
         // 'api-session'=>[
         //     \App\Http\Middleware\StudentLogin::class,
         //     \Illuminate\Session\Middleware\StartSession::class,

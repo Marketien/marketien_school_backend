@@ -15,29 +15,40 @@ class TeacherController extends Controller
     public function TeacherList()
     {
         $data = Teacher::all();
-        return view('Teacher.teacherList',['teachers'=>$data]);
+        return view('Teacher.teacherList', ['teachers' => $data]);
     }
     //for Api
     public function TeacherListApi()
     {
-        $data = Teacher::get();
-        // return response()->json($data);
+        $data = Teacher::all();
+        $teacher=[];
+
+        foreach($data as $user){
+        $fileName = $user->image;
+        $path = asset('/image/upload/'. $fileName );   
+         $user['imglink'] = $path;
+         unset($user['image']); 
+        $teacher[]= $user;
+    }
         return response([
-            'message'=>"api runs successfully"
+            'teacher' => $teacher,
         ]);
+        
     }
     //
-    
-    public function AddTeacherForm(){
+
+    public function AddTeacherForm()
+    {
         return view("Teacher.addTeacher");
     }
-    public function AddTeacher(Request $req){
+    public function AddTeacher(Request $req)
+    {
         $req->validate([
-           'name'=> 'required',
-           'designation'=>'required',
-           'phoneNo'=>'required',
-            'email'=>'required',
-            'image'=>'required',
+            'name' => 'required',
+            'designation' => 'required',
+            'phoneNo' => 'required',
+            'email' => 'required',
+            'image' => 'required',
         ]);
 
         $data = new Teacher();
@@ -48,51 +59,140 @@ class TeacherController extends Controller
         $data->email = $req->email;
         $file = $req->file('image');
         $extension = $file->getClientOriginalExtension();
-        $fileName =time().'.'.$extension;
-        $file->move('image/upload',$fileName);
+        $fileName = time() . '.' . $extension;
+        $file->move('image/upload', $fileName);
         $data->image = $fileName;
         $result = $data->save();
-        if($result){
-            return back()->with('success','you added a teacher Successfully');
-        }
-        else{
-            return back()->with('Fail','something Went Wrong');
+        if ($result) {
+            return back()->with('success', 'you added a teacher Successfully');
+        } else {
+            return back()->with('Fail', 'something Went Wrong');
         }
     }
-    public function UpdateTeacherForm($id){
-        $data = Teacher::find($id);
-        return view('Teacher.updateTeacher',['teacher'=>$data]);
-      }
-      
-      public function UpdateTeacher(Request $req){
-          $data = Teacher::find($req->id);
-          $data->name = $req->name;
-          $data->designation = $req->designation;
-          $data->subject = $req->subject;
-          $data->phoneNo = $req->phoneNo;
-          $data->email = $req->email;
-          if($file = $req->file('image')){
+    public function AddTeacherApi(Request $req)
+    {
+        $req->validate([
+            //    'name'=> 'required',
+            //    'designation'=>'required',
+            //    'phoneNo'=>'required',
+            'email' => 'required|email',
+            // 'image'=>'required',
+        ]);
+
+        $data = new Teacher();
+        $data->name = $req->name;
+        $data->designation = $req->designation;
+        $data->subject = $req->subject;
+        $data->phoneNo = $req->phoneNo;
+        $data->email = $req->email;
+        if ($file = $req->file('image')) {
             $extension = $file->getClientOriginalExtension();
-            $fileName =time().'.'.$extension;
-            $file->move('image/upload',$fileName);
+            $fileName = time() . '.' . $extension;
+            $file->move('image/upload', $fileName);
             $data->image = $fileName;
-        }
-        else{
+        } else {
             unset($data['image']);
         }
-        $result = $data-> save();
-        if($result){
-            return redirect('/teacher-list')->with('message','Teacher Updated successfully'); 
+        $result = $data->save();
+        if ($result) {
+            return response([
+                'message' => 'Teacher added Successfully',
+                'status' => '201'
+            ]);
+        } else {
+            return response([
+                'message' => 'Something went wrong',
+                'status' => '202'
+            ]);
         }
-    else{
-        return back()->with('Fail','something went wrong');
     }
-      }
-      public function teacherDelete($id){
+    public function UpdateTeacherForm($id)
+    {
+        $data = Teacher::find($id);
+        return view('Teacher.updateTeacher', ['teacher' => $data]);
+    }
+    public function UpdateTeacherFormApi($id)
+    {
+        $data = Teacher::find($id);
+        return response([
+            'user' => $data,
+        ]);
+    }
+
+    public function UpdateTeacher(Request $req)
+    {
+        $data = Teacher::find($req->id);
+        $data->name = $req->name;
+        $data->designation = $req->designation;
+        $data->subject = $req->subject;
+        $data->phoneNo = $req->phoneNo;
+        $data->email = $req->email;
+        if ($file = $req->file('image')) {
+            $extension = $file->getClientOriginalExtension();
+            $fileName = time() . '.' . $extension;
+            $file->move('image/upload', $fileName);
+            $data->image = $fileName;
+        } else {
+            unset($data['image']);
+        }
+        $result = $data->save();
+        if ($result) {
+            return redirect('/teacher-list')->with('message', 'Teacher Updated successfully');
+        } else {
+            return back()->with('Fail', 'something went wrong');
+        }
+    }
+    public function UpdateTeacherApi(Request $req)
+    {
+        $data = Teacher::find($req->id);
+        $data->name = $req->name;
+        $data->designation = $req->designation;
+        $data->subject = $req->subject;
+        $data->phoneNo = $req->phoneNo;
+        $data->email = $req->email;
+        if ($file = $req->file('image')) {
+            $extension = $file->getClientOriginalExtension();
+            $fileName = time() . '.' . $extension;
+            $file->move('image/upload', $fileName);
+            $data->image = $fileName;
+        } else {
+            unset($data['image']);
+        }
+        $result = $data->save();
+        if ($result) {
+            return response([
+                'message' => 'Teacher updated Successfully',
+                'status' => '201'
+            ]);
+        } else {
+            return response([
+                'message' => 'somthing went wrong',
+                'status' => '202'
+            ]);
+        }
+    }
+    public function teacherDelete($id)
+    {
         $data = Teacher::find($id);
         $data->delete();
-        return redirect('teacher-list')->with('message','Teacher deleted Successfully');
-}
+        return redirect('teacher-list')->with('message', 'Teacher deleted Successfully');
+    }
+    public function teacherDeleteApi($id)
+    {
+        $data = Teacher::find($id);
+        if(!$data){
+            return response([
+                "message"=>'teacher doesnt exist',
+                "status"=> 202
+            ]);
+        }else{
+            $data->delete();
+            return response([
+                "message"=>'teacher deleted successfuly',
+                "status"=> 201
+            ]);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
