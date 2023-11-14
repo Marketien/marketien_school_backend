@@ -30,7 +30,7 @@ class RoutineController extends Controller
     {
         $data = new Routine();
         $data->title = $req->title;
-        $data->class = $req->wclass;
+        $data->class = $req->wClass;
         $data->section = $req->section;
         if ($file = $req->file('pdf')) {
             $extension = $file->getClientOriginalExtension();
@@ -56,6 +56,8 @@ class RoutineController extends Controller
     public function UpdateRoutineFormApi($id)
     {
         $data = Routine::find($id);
+        $data['wClass'] = $data['class'];
+          unset($data['class']);
         return response([
             'user' => $data,
         ]);
@@ -64,7 +66,7 @@ class RoutineController extends Controller
     {
         $data = Routine::find($req->id);
         $data->title = $req->title;
-        $data->class = $req->wclass;
+        $data->class = $req->wClass;
         $data->section = $req->section;
         if ($file = $req->file('pdf')) {
             $extension = $file->getClientOriginalExtension();

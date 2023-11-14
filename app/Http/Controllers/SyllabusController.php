@@ -30,7 +30,7 @@ class SyllabusController extends Controller
     {
         $data = new Syllabus();
         $data->title = $req->title;
-        $data->class = $req->wclass;
+        $data->class = $req->wClass;
         $data->subject = $req->subject;
         if ($file = $req->file('pdf')) {
             $extension = $file->getClientOriginalExtension();
@@ -56,6 +56,8 @@ class SyllabusController extends Controller
     public function UpdateSyllabusFormApi($id)
     {
         $data = Syllabus::find($id);
+        $data['wClass'] = $data['class'];
+        unset($data['class']);
         return response([
             'user' => $data,
         ]);
@@ -64,7 +66,7 @@ class SyllabusController extends Controller
     {
         $data = Syllabus::find($req->id);
         $data->title = $req->title;
-        $data->class = $req->wclass;
+        $data->class = $req->wClass;
         $data->subject = $req->subject;
         if ($file = $req->file('pdf')) {
             $extension = $file->getClientOriginalExtension();
