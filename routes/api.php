@@ -65,7 +65,13 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::delete('/syllabus-delete/{id}',[SyllabusController::class,'syllabusDeleteApi'])->name('syllabus-delete-api');
         Route::get('/syllabus-edit/{id}',[SyllabusController::class,'UpdateSyllabusFormApi'])->name('syllabus-edit-information');
         Route::post('/syllabus-update',[SyllabusController::class,'UpdateSyllabusApi'])->name('syllabus-update-api');
+         //admin Payment Api
 
+         Route::get('pending-payment',[PaymentController::class,'getPendingPaymentApi'])->name('pending-payment');
+         Route::get('/payment-approve/{id}',[PaymentController::class,'paymentApprovedApi'])->name('payment-approve-api');
+         Route::get('/approved-payment',[PaymentController::class,'getApprovedPaymentApi'])->name('approved-payment');
+         Route::get('/payment-history/{studentId}',[PaymentController::class,'getPaymentHistory'])->name('payment-history');
+         
 
     });
     Route::group(['middleware' => 'studentApi'], function(){
@@ -87,4 +93,6 @@ Route::get('/teacher-listApi',[TeacherController::class,'TeacherListApi'])->name
 Route::get('/notice-listApi',[NoticeController::class,'noticeListApi'])->name('notice-list-api');
 Route::get('/routine-listApi',[RoutineController::class,'routineListApi'])->name('routine-list-api');
 Route::get('/syllabus-listApi',[SyllabusController::class,'syllabusListApi'])->name('syllabus-list-api');
+
+Route::get('unpaid-student',[PaymentController::class,'unpaidStudents']);
 

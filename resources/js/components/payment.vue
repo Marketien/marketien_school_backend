@@ -46,6 +46,16 @@
 
        <br>
        </div>
+       <div class="form-group row">
+        <div class="col-md-6">
+            <label>Transaction Id</label>
+            <input type="text" class="form-control" v-model="transactionId"   >
+        </div>
+        <div class="col-md-6">
+            <label>Payment Status</label>
+            <input  type="text" class="form-control" v-model="paymentStatus"   >
+        </div>
+       </div>
         <div class="form-group row">
             <label class="col-md-4 col-form-label"></label>
             <div class="col-md-8">
@@ -68,6 +78,8 @@ export default {
             name:'',
             regNo:'',
             class:'',
+            transactionId:'',
+            paymentStatus:'',
             fatherName:'',
             id:'',
             
@@ -120,6 +132,8 @@ export default {
                 
             }
             this.initial = this.amount/this.amt;
+            this.paymentStatus = 1;
+            
             
             // if((this.amount/this.amt) != this.initial){
             //     this.amount = this.amount - (this.initial* this.amt);
@@ -133,7 +147,9 @@ export default {
                     regNo: this.regNo,
                     class: this.class,
                     month:this.month,
-                    amount:this.amount
+                    amount:this.amount,
+                    transactionId:this.transactionId,
+                    payment_status:this.paymentStatus
                 }).then((response)=>{
                   this.id = response.data;
                   window.location.href = ('/student-detail');

@@ -58,6 +58,7 @@ class SyllabusController extends Controller
         $data = Syllabus::find($id);
         $data['wClass'] = $data['class'];
         unset($data['class']);
+        
         return response([
             'user' => $data,
         ]);
