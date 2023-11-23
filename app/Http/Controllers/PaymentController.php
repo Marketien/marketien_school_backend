@@ -83,7 +83,7 @@ class PaymentController extends Controller
             for ($s = 0; $s < $size; $s++) {
                 if ($s + 1 < $size)
                     $result[] = array_merge($getMonths[$s], $getMonths[$s + 1]);
-            } 
+            }         
         }
         for ($s = 0; $s < $size; $s++) {
             if ($s + 1 < $size)
