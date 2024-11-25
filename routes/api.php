@@ -25,7 +25,7 @@ use App\Models\Teacher;
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     // return $request->user();
-    
+
 // });
 Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::group(['middleware' => 'adminApi'], function(){
@@ -44,9 +44,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::get('/teacher-edit/{id}',[TeacherController::class,'UpdateTeacherFormApi'])->name('teacher-edit-information');
         Route::post('/teacher-update',[TeacherController::class,'UpdateTeacherApi'])->name('teacher-update-api');
         Route::delete('/teacher-delete/{id}',[TeacherController::class,'teacherDeleteApi'])->name('teacher-delete-api');
-    
+
         //   admin Notice Api
-        
+
         Route::post('/add-notice',[NoticeController::class,'addNoticeApi'])->name('add-notice-api');
         Route::delete('/notice-delete/{id}',[NoticeController::class,'noticeDeleteApi'])->name('notice-delete-api');
         Route::get('/notice-edit/{id}',[NoticeController::class,'UpdateNoticeFormApi'])->name('notice-edit-information');
@@ -58,9 +58,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::delete('/routine-delete/{id}',[RoutineController::class,'routineDeleteApi'])->name('routine-delete-api');
         Route::get('/routine-edit/{id}',[RoutineController::class,'UpdateRoutineFormApi'])->name('routine-edit-information');
         Route::post('/routine-update',[RoutineController::class,'UpdateRoutineApi'])->name('routine-update-api');
-          
+
         //Admin Syllubus Api
-        
+
         Route::post('/add-syllabus',[SyllabusController::class,'addSyllabusApi'])->name('add-syllabus-api');
         Route::delete('/syllabus-delete/{id}',[SyllabusController::class,'syllabusDeleteApi'])->name('syllabus-delete-api');
         Route::get('/syllabus-edit/{id}',[SyllabusController::class,'UpdateSyllabusFormApi'])->name('syllabus-edit-information');
@@ -71,7 +71,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
          Route::get('/payment-approve/{id}',[PaymentController::class,'paymentApprovedApi'])->name('payment-approve-api');
          Route::get('/approved-payment',[PaymentController::class,'getApprovedPaymentApi'])->name('approved-payment');
          Route::get('/payment-history/{studentId}',[PaymentController::class,'getPaymentHistory'])->name('payment-history');
-         
+
 
     });
     Route::group(['middleware' => 'studentApi'], function(){

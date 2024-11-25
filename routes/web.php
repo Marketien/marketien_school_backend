@@ -30,9 +30,7 @@ Route::group(['name'=>'admin', 'middleware'=>'adminpages'], function(){
     Route::get('/student-accept/{id}',[studentController::class,'studentApproved']);
     Route::get('/student-form',[studentController::class,'studentForm']);
     Route::post('/addStudent',[studentController::class,'addStudent']);
-//    Route::post('/student-delete',[studentController::class,'studentDelete'])->name('deleteStudent');
-//    Route::get('/student-info/{id}',[studentController::class,'getStudentInformation'])->name('studentInfo');
-    // Route::get('/student-delete/{id}',[studentController::class,'studentDelete']);
+
     Route::get('/student-edit/{id}',[studentController::class,'updateForm']);
     Route::post('/update-student',[studentController::class,'studentUpdate']);
     Route::get('/logout-admin',[AdminController::class,'logoutAdmin']);
@@ -57,7 +55,6 @@ Route::post('/reg-Student',[studentController::class,'studentReg']);
 Route::group(['name'=>'student', 'middleware'=>'studentpages'], function(){
 Route::get('/student-detail',[studentController::class,'studentDetail']);
 Route::get('/payment-form',[PaymentController::class,'paymentForm'])->middleware('otpPay');
-// Route::get('/get-student-name',[PaymentController::class,'getStudent'])->name('get-student-name');
 Route::get('/logout-student',[studentController::class,'logoutStudent']);
 
 

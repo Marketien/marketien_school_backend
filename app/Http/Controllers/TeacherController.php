@@ -7,11 +7,7 @@ use Illuminate\Http\Request;
 
 class TeacherController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function TeacherList()
     {
         $data = Teacher::all();
@@ -25,17 +21,17 @@ class TeacherController extends Controller
 
         foreach($data as $user){
         $fileName = $user->image;
-        $path = asset('/image/upload/'. $fileName );   
+        $path = asset('/image/upload/'. $fileName );
          $user['imglink'] = $path;
-         unset($user['image']); 
+         unset($user['image']);
         $teacher[]= $user;
     }
         return response([
             'teacher' => $teacher,
         ]);
-        
+
     }
-    //
+    // for inner html
 
     public function AddTeacherForm()
     {
@@ -69,14 +65,13 @@ class TeacherController extends Controller
             return back()->with('Fail', 'something Went Wrong');
         }
     }
+    // for api
     public function AddTeacherApi(Request $req)
     {
         $req->validate([
-            //    'name'=> 'required',
-            //    'designation'=>'required',
-            //    'phoneNo'=>'required',
+
             'email' => 'required|email',
-            // 'image'=>'required',
+
         ]);
 
         $data = new Teacher();
@@ -106,11 +101,13 @@ class TeacherController extends Controller
             ]);
         }
     }
+    // for inner html
     public function UpdateTeacherForm($id)
     {
         $data = Teacher::find($id);
         return view('Teacher.updateTeacher', ['teacher' => $data]);
     }
+    // for api
     public function UpdateTeacherFormApi($id)
     {
         $data = Teacher::find($id);
@@ -118,7 +115,7 @@ class TeacherController extends Controller
             'user' => $data,
         ]);
     }
-
+// for inner html
     public function UpdateTeacher(Request $req)
     {
         $data = Teacher::find($req->id);
@@ -142,6 +139,7 @@ class TeacherController extends Controller
             return back()->with('Fail', 'something went wrong');
         }
     }
+    // for api
     public function UpdateTeacherApi(Request $req)
     {
         $data = Teacher::find($req->id);
@@ -171,12 +169,14 @@ class TeacherController extends Controller
             ]);
         }
     }
+    // for inner html
     public function teacherDelete($id)
     {
         $data = Teacher::find($id);
         $data->delete();
         return redirect('teacher-list')->with('message', 'Teacher deleted Successfully');
     }
+// for api
     public function teacherDeleteApi($id)
     {
         $data = Teacher::find($id);
@@ -193,69 +193,5 @@ class TeacherController extends Controller
             ]);
         }
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Teacher  $teacher
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Teacher $teacher)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Teacher  $teacher
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Teacher $teacher)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Teacher  $teacher
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Teacher $teacher)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Teacher  $teacher
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Teacher $teacher)
-    {
-        //
-    }
 }

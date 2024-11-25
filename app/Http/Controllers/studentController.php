@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 
 class studentController extends Controller
 {
+    // for inner html
     public function studentList(){
         $std = Student::where('status',2)->get();
         return view('Admin.Student.studentList',['students'=>$std]);
@@ -28,6 +29,7 @@ class studentController extends Controller
             'student'=> $std
         ]) ;
     }
+    // for inner html
     public function studentApproval(){
         $std = Student::where('status',1)->get();
         return view('Admin.Student.studentApproval',['students'=>$std]);
@@ -39,9 +41,11 @@ class studentController extends Controller
             'student'=> $std
         ]) ;
     }
+    // for inner html
     public function studentForm(){
         return view('Admin.Student.addStudent');
     }
+    // for inner html
     public function addStudent(Request $req){
         $req->validate([
            'name'=>'required',
@@ -92,22 +96,9 @@ class studentController extends Controller
         }
 
     }
+    // for api
     public function adminStudentRegApi(Request $req){
-        // $req->validate([
-        // //    'name'=>'required',
-        // //     'fatherName'=>'required',
-        // //     'motherName'=>'required',
-        // //     'birthDate'=>'required',
-        // //     'phoneNo'=>'required',
-        //     'email'=>'required|email|unique:students',
-        //     // 'password'=>'required',
-        //     // 'address'=>'required',
-        //     // 'class'=>'required',
-        //     // 'section'=>'required',
-        //     // 'image'=>'required',
-        //     // 'rollNo'=>'required',
-        //     // 'regNo'=>'required'
-        // ]);
+
         $validator = Validator::make($req->all(), [
         'email'=>'required|email|unique:students'
         ]);
@@ -158,21 +149,12 @@ class studentController extends Controller
                   ]);
             }
         }
-       
+
     }
-//    public function getStudentInformation(Request $request){
-//        $user = Student::where('id',$request->id)->first();
-//        return $user;
-//    }
-//
-//    function studentDelete(Request $request){
-//        Student::where('id',$request->id)->delete();
-//        return redirect('product-list')->with('message','Successful! Product Deleted Successfully');
-//    }
 
 //delete api
 public function studentDeleteApi($id){
-    
+
         $data = Student::find($id);
         if(!$data){
             return response([
@@ -186,23 +168,26 @@ public function studentDeleteApi($id){
                 "status"=> 201
             ]);
         }
-       
+
 }
+// for inner html
 public function updateForm($id){
         $data = Student::find($id);
         return view('Admin.Student.updateStudent',['std'=>$data]);
 
 }
+// for api
 public function updateFormApi($id){
     $data = Student::find($id);
     $data['wclass'] = $data['class'];
     unset($data['class']);
     // $data['clasx'] = $data->class;
     return response([
-       'user'=> $data,    
+       'user'=> $data,
     ]);
 
 }
+// for inner html
 public function studentUpdate(Request $req){
         $data = Student::find($req->id);
         $user = Student::where('id',$data->id)->first();
@@ -230,11 +215,11 @@ public function studentUpdate(Request $req){
             }
             $result = $data-> save();
             if($result){
-                    return redirect('/student-list')->with('message','Student Updated successfully'); 
+                    return redirect('/student-list')->with('message','Student Updated successfully');
                 }
             else{
                 return back()->with('Fail','something went wrong');
-            }  
+            }
         }
         else{
             $data->name = $req->name;
@@ -260,18 +245,19 @@ public function studentUpdate(Request $req){
             }
             $result = $data-> save();
             if($result){
-                    return redirect('/student-approval')->with('message','Student Updated successfully'); 
+                    return redirect('/student-approval')->with('message','Student Updated successfully');
                 }
             else{
                 return back()->with('Fail','something went wrong');
             }
 
         }
-   
+
 
 
 
 }
+// for api
 public function UpdateStudentApi(Request $req){
     $data = Student::find($req->id);
     $data->name = $req->name;
@@ -299,15 +285,16 @@ public function UpdateStudentApi(Request $req){
       return response([
         'message'=>'Student Edited Successfully',
         'status' => 201
-      ]); 
+      ]);
   }
 else{
     return response([
         'message'=>'Something went wrong ',
         'status' => 202
-      ]); 
+      ]);
 }
 }
+// for inner html
 public function studentSignUpForm(){
     return view('Student.studentSignUp');
 }
@@ -337,7 +324,7 @@ public function studentDetail(){
     $data = Student::where('id',session('loggedStudent'))->first();
     return view('Student.studentDetail',['stdn'=>$data]);
 }
-//api 
+// for api
 public function studentDetailApi(){
     $data = Student::where('email',auth()->user()->email)->first();
     $fileName = $data->image;
@@ -362,6 +349,7 @@ public function AdminStudentDetailApi($id){
         'payment'=>$payment
     ]);
 }
+// for inner html
 public function logoutStudent(){
     if(session()->has('loggedStudent')){
         $data = Student::where('id',session('loggedStudent'))->first();
@@ -370,24 +358,14 @@ public function logoutStudent(){
       return redirect('/');
     }
   }
-  //Api
+  // for api
 public function studentRegApi(Request $req){
     $req->validate([
-    //    'name'=>'required',
-    //     'fatherName'=>'required',
-    //     'motherName'=>'required',
-    //     'birthDate'=>'required',
-    //     'phoneNo'=>'required',
+
         'email'=>'required|email|unique:users',
-        // 'password'=>'required',
-        // 'image'=>'required',
+
     ]);
-    // $data = New User();
-    // $data->name = $req->name;
-    // $data->email = $req->email;
-    // $data->role = 2;
-    // $data->password = Hash::make($req->password);
-    // $data->save();
+
     $date = strtotime($req->birthDate);
     $formatDate = date('Y-m-d', $date);
     $user = New Student();
@@ -425,7 +403,7 @@ public function studentRegApi(Request $req){
     }
 
 }
-//api//
+// for inner html
 public function studentReg(Request $req){
     $req->validate([
        'name'=>'required',
@@ -466,6 +444,7 @@ public function studentReg(Request $req){
     }
 
 }
+// for inner html
 public function studentApproved($id){
     $data = Student::find($id);
     $data->status = 2;
@@ -479,6 +458,7 @@ public function studentApproved($id){
     return redirect()->back()->with('message','Student Approved');
 
 }
+// for api
 public function studentApprovedApi($id){
     $data = Student::find($id);
     $data->status = 2;
@@ -501,8 +481,9 @@ public function studentApprovedApi($id){
             'status'=>'202'
           ]);
     }
-   
+
 }
+// for inner html
 public function studentPaymentDetail($id){
      $data = Student::find($id);
      $user = Payment::where('studentId',$data->id)->get();

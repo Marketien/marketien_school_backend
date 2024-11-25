@@ -83,7 +83,7 @@ class PaymentController extends Controller
             for ($s = 0; $s < $size; $s++) {
                 if ($s + 1 < $size)
                     $result[] = array_merge($getMonths[$s], $getMonths[$s + 1]);
-            }         
+            }
         }
         for ($s = 0; $s < $size; $s++) {
             if ($s + 1 < $size)
@@ -100,7 +100,7 @@ class PaymentController extends Controller
         else{
             $student['unpaid'] = ['Payment completed'];
         }
-        
+
         return response([
             'payment' => $data,
             'student' => $student
@@ -137,36 +137,5 @@ class PaymentController extends Controller
         }
         return $unpaidStudent;
     }
-    // public function getUnpaidHistory($id){
-    //     $allMonths = array('january','february','march','april','may','june','july','august','september','october','november','december');
-    //     $payable = [];
-    //     $currentMonth = date("m");
-    //     $data = Student::where('id',$id)->first();
-    //     $result =[];
-    //     $getMonths=[];
-    //     $payment = Payment::where('studentId',$data->id)->get();
-    //         foreach($payment as $pmt){
-    //             // $month = implode(',',$pmt->months);
-    //             $getMonths[] = $pmt->months;
-    //         }
-
-
-    //         $size = count($getMonths);
-    //         for($s = 0; $s<$size;$s++){
-    //             if($s + 1 < $size)
-    //          $result[] = array_merge($getMonths[$s],$getMonths[$s+1]);
-    //         }
-
-
-
-    //         for ($i = 0;$i<$currentMonth;$i++){
-    //             if(!in_array($allMonths[$i],$result[0])){;
-    //              $payable[] = $allMonths[$i];
-    //             }
-
-    //         }
-
-
-    //     return $payable;
-    // }
+    
 }
